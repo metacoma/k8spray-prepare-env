@@ -16,5 +16,5 @@ RUN \
       openssl-dev \
     && pip install ansible==2.3.0.0
 
-
+RUN git clone https://github.com/metacoma/k8spray-prepare-env.git /opt/playbooks/prepare
 ENTRYPOINT ansible-playbook -e env_id=$ENV_ID /opt/playbooks/prepare/playbook.yml

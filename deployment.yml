@@ -28,6 +28,7 @@
         content: "{{ kubespray.default | to_yaml }}"
         dest: "/tmp/{{ apocng_uuid }}-kubespray-values"
 
-    - command: "ansible-playbook -i /tmp/inventory.cfg -e@/tmp/{{ apocng_uuid }}-kubespray-values /opt/playbooks/kubespray/cluster.yml --become"
+#    - command: "ansible-playbook -i /tmp/inventory.cfg -e@/tmp/{{ apocng_uuid }}-kubespray-values /opt/playbooks/kubespray/cluster.yml --become"
+    - command: "ansible-playbook -i /tmp/inventory.cfg /opt/playbooks/kubespray/cluster.yml --become"
       environment:
         ANSIBLE_CONFIG: "/opt/playbooks/kubespray/ansible.cfg"

@@ -18,4 +18,5 @@ RUN \
 
 RUN git clone https://github.com/metacoma/k8spray-workflow.git /opt/playbooks/workflow
 RUN git clone https://github.com/kubernetes-incubator/kubespray /opt/playbooks/kubespray
+RUN ansible-galaxy install -r /opt/playbooks/workflow/requirements.yml
 ENTRYPOINT ansible-playbook -e env_id=$ENV_ID /opt/playbooks/workflow/playbook.yml

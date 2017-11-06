@@ -36,8 +36,13 @@
       retries: 16
       delay: 2
 
+    - command: kubectl -n kube-system create sa tiller
+      #ignore_errors: true
+    - command: kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+      #ignore_errors: true
+
     - name: helm init
-      command: helm init
+      command: helm init --service-account tiller
 
 
     - shell: "kubectl -n kube-system get pods --ignore-not-found -l name=tiller -o jsonpath='{.items[?(@.status.containerStatuses[0].ready == true)].metadata.name}'"

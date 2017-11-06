@@ -1,16 +1,18 @@
 providers:
   aws:
     enabled: true
-    zone: us-west-2
+    zone: us-west-2c
 
 spinnaker:
   redis:
     persistence:
       enabled: true
+      storageClass: gp2
   minio:
     replicas: 4
     persistence:
       type: PersistentVolumeClaim
+      storageClass: gp2
 
   ui:
     service:

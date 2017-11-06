@@ -1,2 +1,9 @@
 api:
   host: https://apocng-k8spray:443
+
+kubespray:
+  default:
+    dashboard_enabled: True
+    dns_mode: kubedns
+    cloud_provider: aws
+    istio_enabled: True

@@ -7,6 +7,7 @@
       instance_id: '{{ terraform_item.value.primary.attributes.id }}'
       provisioner: "terraform"
       private_dns: '{{ terraform_item.value.primary.attributes.private_dns }}'
+      private_ip: '{{ terraform_item.value.primary.attributes.private_ip }}'
     ansible_become: true
     groups: target_hosts
   when: "terraform_item.value.type == 'aws_instance'"

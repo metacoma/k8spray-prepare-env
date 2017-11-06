@@ -1,8 +1,33 @@
 ---
 - hosts: localhost
   gather_facts: false
+  vars:
+    work_dir: /opt/terraform
+    apocng_provision_driver: "terraform"
+
+  pre_tasks:
+    - include: tasks/env.yml action=load
+      tags:
+        - env
+
+  post_tasks:
+    - include: tasks/env.yml action=save
+      tags:
+        - env
+
   tasks:
-    - debug:
-        msg: "hello world"
 
+    - include: tasks/group.yml terraform_item="{{ item }}"
+      with_dict: "{{ apocng_terraform.modules[0].resources }}"
+      when: apocng_provision_driver  == "terraform"
 
+    - include: tasks/dump_ssh_key.yml
+    - include: tasks/inventory.yml
+
+    - copy:
+        content: "{{ kubespray.default | to_yaml }}"
+        dest: "/tmp/{{ apocng_uuid }}-kubespray-values"
+
+    - command: "ansible-playbook -i /tmp/inventory.cfg -e@/tmp/{{ apocng_uuid }}-kubespray-values /opt/playbooks/kubespray/cluster.yml --become"
+      environment:
+        ANSIBLE_CONFIG: "/opt/playbooks/kubespray/ansible.cfg"

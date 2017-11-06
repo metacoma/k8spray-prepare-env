@@ -20,6 +20,8 @@
       with_dict: "{{ apocng_terraform.modules[0].resources }}"
       when: apocng_provision_driver  == "terraform"
 
+    - include: tasks/dump_ssh_key.yml
+
 - hosts: target_hosts
   gather_facts: false
   tasks:

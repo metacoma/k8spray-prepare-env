@@ -1,8 +1,56 @@
 ---
 - hosts: localhost
   gather_facts: false
-  tasks:
-    - debug:
-        msg: "hello world"
+  vars:
+    work_dir: /opt/terraform
+    apocng_provision_driver: "terraform"
 
+  pre_tasks:
+    - include: tasks/env.yml action=load
+      tags:
+        - env
+
+  post_tasks:
+    - include: tasks/env.yml action=save
+      tags:
+        - env
+
+  tasks:
+
+    - include: tasks/group.yml terraform_item="{{ item }}"
+      with_dict: "{{ apocng_terraform.modules[0].resources }}"
+      when: apocng_provision_driver  == "terraform"
+
+    - include: tasks/dump_ssh_key.yml
+
+
+- hosts: target_hosts[0]
+  gather_facts: true
+  roles:
+    - andrewrothstein.kubernetes-helm
+  tasks:
+    - name: Wait for nodes
+      command: kubectl get nodes --ignore-not-found -o json | jq '.items[].status.conditions[] | select ((.reason == "KubeletReady") and (.status == "False"))'
+      register: minikube_is_ready
+      until: minikube_is_ready != ""
+      retries: 16
+      delay: 2
+
+    - name: helm init
+      command: helm init
+
+
+    - shell: "kubectl -n kube-system get pods --ignore-not-found -l name=tiller -o jsonpath='{.items[?(@.status.containerStatuses[0].ready == true)].metadata.name}'"
+      register: tiller_pod_cmd
+      until: tiller_pod_cmd.stdout != ""
+      retries: 100
+      delay: 2
+
+    - shell: "helm version"
+      register: helm_status
+      until: helm_status.rc == 0
+      retries: 100
+      delay: 2
+
+    - include: tasks/install_k8spray_chart.yml
 

@@ -14,7 +14,8 @@ RUN \
       python-dev  \
       libffi-dev  \
       openssl-dev \
-    && pip install ansible==2.3.0.0
+    && pip install netaddr configparser ansible==2.3.0.0
 
 RUN git clone https://github.com/metacoma/k8spray-workflow.git /opt/playbooks/workflow
+RUN git clone https://github.com/kubernetes-incubator/kubespray /opt/playbooks/kubespray
 ENTRYPOINT ansible-playbook -e env_id=$ENV_ID /opt/playbooks/workflow/playbook.yml

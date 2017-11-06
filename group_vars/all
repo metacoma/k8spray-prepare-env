@@ -3,7 +3,5 @@ api:
 
 kubespray:
   default:
-    dashboard_enabled: True
-    dns_mode: kubedns
     cloud_provider: aws
-    istio_enabled: True
+#    istio_enabled: True

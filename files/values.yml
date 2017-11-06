@@ -1,0 +1,17 @@
+providers:
+  aws:
+    enabled: true
+    zone: us-west-2
+
+spinnaker:
+  redis:
+    persistence:
+      enabled: true
+  minio:
+    replicas: 4
+    persistence:
+      type: PersistentVolumeClaim
+
+  ui:
+    service:
+      type: LoadBalancer

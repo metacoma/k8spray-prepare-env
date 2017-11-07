@@ -15,6 +15,16 @@
         - env
 
   tasks:
+    - include: tasks/group.yml terraform_item="{{ item }}"
+      with_dict: "{{ apocng_terraform.modules[0].resources }}"
+      when: apocng_provision_driver  == "terraform"
+
+    - include: tasks/dump_ssh_key.yml
+
+    - name: "delete helm chart"
+      command: "helm delete k8spray"
+      delegate_to: target_hosts[0]
+
     - name: create terraform directory
       file:
         dest: "{{ work_dir }}"

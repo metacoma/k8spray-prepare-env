@@ -7,13 +7,9 @@
 
   pre_tasks:
     - include: tasks/env.yml action=load
-      tags:
-        - env
 
   post_tasks:
     - include: tasks/env.yml action=save
-      tags:
-        - env
 
   tasks:
 
@@ -26,6 +22,15 @@
 
 - hosts: target_hosts[0]
   gather_facts: true
+
+  pre_tasks:
+    - include: tasks/env.yml action=load
+      delegate_to: localhost
+
+  post_tasks:
+    - include: tasks/env.yml action=save
+      delegate_to: localhost
+
   roles:
     - andrewrothstein.kubernetes-helm
   tasks:

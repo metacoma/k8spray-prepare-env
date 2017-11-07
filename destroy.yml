@@ -1,0 +1,54 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    work_dir: /opt/terraform
+
+  pre_tasks:
+    - include: tasks/env.yml action=load
+      tags:
+        - env
+
+  post_tasks:
+    - include: tasks/env.yml action=save
+      tags:
+        - env
+
+  tasks:
+    - name: create terraform directory
+      file:
+        dest: "{{ work_dir }}"
+        state: directory
+
+    - name: template terraform manifest
+      template:
+        src: templates/terraform.tf.j2
+        dest: "{{ work_dir }}/terraform.tf"
+
+    - include: tasks/dump_ssh_key.yml
+
+    - name: dump terraform state
+      copy:
+        content: "{{ apocng_terraform | to_json }}"
+        dest: "{{ work_dir }}/terraform.tfstate"
+
+    - name: json fix
+      replace:
+        path:  "/{{ work_dir }}/terraform.tfstate"
+        regexp: '"(depends_on|deposed)": {}'
+        replace: '"\1": []'
+
+    - name: terraform init
+      command: terraform init
+      args:
+        chdir: "{{ work_dir }}"
+
+    - name: terraform plan
+      command: terraform plan
+      args:
+        chdir: "{{ work_dir }}"
+
+    - name: terraform destroy
+      command: terraform destroy -force
+      args:
+        chdir: "{{ work_dir }}"

@@ -1,5 +1,12 @@
-- name: save ssh key
+- name: dump ssh private key
   copy:
     content: "{{ apocng_ssh_private_key }}"
     dest: "/tmp/{{ apocng_uuid }}-key"
     mode: 0600
+
+- name: dump ssh pub key
+  copy:
+    content: "{{ apocng_ssh_pub_key }}"
+    dest: "/tmp/{{ apocng_uuid }}-key.pub"
+    mode: 0600
+

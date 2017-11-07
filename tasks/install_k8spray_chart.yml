@@ -8,10 +8,10 @@
   command: "curl -o {{ chart_path }} -Lk {{ chart_url }}"
 
 - name: "copy values.yml"
-  copy:
-    src: files/values.yml
+  template:
+    src: values.yml.j2
     dest: /tmp/values.yml
 
 
 - name: install lcm chart
-  command: "helm install -f /tmp/values.yml --wait --namespace k8spray -n k8spray {{ chart_path }} "
+  command: "helm install --timeout 900 -f /tmp/values.yml --wait --namespace k8spray -n k8spray {{ chart_path }} "

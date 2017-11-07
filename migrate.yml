@@ -31,5 +31,11 @@
         content: "{{ hostvars['localhost'].migrate | to_json }}"
         dest: "/tmp/env"
 
+    - command: kubectl -n k8spray get pods -l app=apocng-k8spray -o jsonpath='{.items[0].metadata.name}'
+      register: pod
+
+    - set_fact:
+        pod: "{{ pod.stdout }}"
+
     - name: upload envdata
-      shell: "cat /tmp/env | kubectl -n k8spray exec -i apocng-k8spray-6d5ff745c7-s8dql -- curl -f -d@- -X POST -k https://localhost/api/store2/{{ env_id }}/"
+      shell: "cat /tmp/env | kubectl -n k8spray exec -i {{ pod }} -- curl -f -d@- -X POST -k https://localhost/api/store2/{{ env_id }}/"

@@ -14,5 +14,22 @@
 
   tasks:
 
-    - name: hello world
-      command: "echo hello world"
+    - include: tasks/group.yml terraform_item="{{ item }}"
+      with_dict: "{{ apocng_terraform.modules[0].resources }}"
+      when: apocng_provision_driver  == "terraform"
+
+    - include: tasks/dump_ssh_key.yml
+    - include_vars:
+        file: "/tmp/{{ apocng_uuid }}"
+        name: migrate
+
+- hosts: target_hosts[0]
+  gather_facts: false
+  tasks:
+    - name: dump env file
+      copy:
+        content: "{{ hostvars['localhost'].migrate | to_json }}"
+        dest: "/tmp/env"
+
+    - name: upload envdata
+      shell: "cat /tmp/env | kubectl -n k8spray exec -i apocng-k8spray-6d5ff745c7-s8dql -- curl -f -d@- -X POST -k https://localhost/api/store2/{{ env_id }}/"

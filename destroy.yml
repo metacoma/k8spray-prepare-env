@@ -20,6 +20,7 @@
     - name: "delete helm chart"
       command: "helm delete k8spray"
       delegate_to: "{{ groups['target_hosts'][0] }}"
+      ignore_erorrs: true
 
     - name: create terraform directory
       file:

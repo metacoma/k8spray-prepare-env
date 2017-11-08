@@ -5,3 +5,5 @@ kubespray:
   default:
     cloud_provider: aws
 #    istio_enabled: True
+
+terraform_dir: "/opt/terraform"

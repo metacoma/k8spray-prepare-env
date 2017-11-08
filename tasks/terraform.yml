@@ -1,7 +1,3 @@
-- set_fact:
-    terraform_dir: /opt/terraform
-
-
 - name: create terraform directory
   file:
     dest: "{{ terraform_dir }}"
@@ -42,4 +38,3 @@
   command: terraform plan
   args:
     chdir: "{{ terraform_dir }}"
-

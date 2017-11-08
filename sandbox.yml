@@ -1,0 +1,62 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    terraform_dir: /opt/terraform
+
+  pre_tasks:
+    - include: tasks/env.yml action=load
+
+  post_tasks:
+    - include: tasks/env.yml action=save
+
+
+  tasks:
+    - include: tasks/terraform.yml
+      when: apocng_provision_driver  == "terraform"
+
+    - name: "terraform apply"
+      command: "terraform apply"
+      args:
+        chdir: "{{ terraform_dir }}"
+      when: apocng_provision_driver  == "terraform"
+
+#    - name: load terraform facts
+#      include_vars:
+#        file: "{{ terraform_dir }}/terraform.tfstate"
+#        name: apocng_terraform
+#      when: apocng_provision_driver  == "terraform"
+
+#    - include: tasks/group.yml terraform_item="{{ item }}"
+#      with_dict: "{{ apocng_terraform.modules[0].resources }}"
+#      when: apocng_provision_driver  == "terraform"
+
+    - include: tasks/inventory.yml
+
+- hosts: target_hosts
+  gather_facts: false
+  tasks:
+    - name: add python
+      raw: "apt update && apt install -y python"
+
+    - name: add python
+      command: "id"
+
+- hosts: localhost
+  gather_facts: false
+  pre_tasks:
+    - include: tasks/env.yml action=load
+  post_tasks:
+    - include: tasks/env.yml action=save
+  tasks:
+
+    - include: tasks/dump_ssh_key.yml
+    - include: tasks/inventory.yml
+
+    - copy:
+        content: "{{ kubespray.default | to_yaml }}"
+        dest: "/tmp/{{ apocng_uuid }}-kubespray-values"
+
+#    - command: "ansible-playbook -i /tmp/inventory.cfg -e@/tmp/{{ apocng_uuid }}-kubespray-values /opt/playbooks/kubespray/scale.yml --become"
+#      environment:
+#        ANSIBLE_CONFIG: "/opt/playbooks/kubespray/ansible.cfg"

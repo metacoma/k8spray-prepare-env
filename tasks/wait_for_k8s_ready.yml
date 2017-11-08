@@ -1,0 +1,10 @@
+- name: Wait for pods to be ready
+  shell: "kubectl get pods --all-namespaces"
+  register: pods
+  until:
+    - '"ContainerCreating" not in pods.stdout'
+    - '"Pending" not in pods.stdout'
+    - '"Terminating" not in pods.stdout'
+  retries: 60
+  delay: 2
+  no_log: true

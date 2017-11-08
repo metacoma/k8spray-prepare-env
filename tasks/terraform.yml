@@ -1,0 +1,45 @@
+- set_fact:
+    terraform_dir: /opt/terraform
+
+
+- name: create terraform directory
+  file:
+    dest: "{{ terraform_dir }}"
+    state: directory
+
+- name: template terraform manifest
+  template:
+    src: templates/terraform.tf.j2
+    dest: "{{ terraform_dir }}/terraform.tf"
+
+- include: tasks/dump_ssh_key.yml
+  when: apocng_ssh_private_key is defined
+
+- name: dump terraform state
+  copy:
+    content: "{{ apocng_terraform | to_json }}"
+    dest: "{{ terraform_dir }}/terraform.tfstate"
+  when: apocng_terraform is defined
+
+- name: json fix
+  replace:
+    path:  "/{{ terraform_dir }}/terraform.tfstate"
+    regexp: '"(depends_on|deposed)": {}'
+    replace: '"\1": []'
+  when: apocng_terraform is defined
+
+- name: template terraform manifest
+  template:
+    src: templates/terraform.tf.j2
+    dest: "{{ terraform_dir }}/terraform.tf"
+
+- name: terraform init
+  command: terraform init
+  args:
+    chdir: "{{ terraform_dir }}"
+
+- name: terraform plan
+  command: terraform plan
+  args:
+    chdir: "{{ terraform_dir }}"
+

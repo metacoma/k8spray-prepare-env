@@ -12,8 +12,6 @@
 
 
   tasks:
-    - set_fact:
-        apocng_k8s_nodes: 4
     - include: tasks/terraform.yml
       when: apocng_provision_driver  == "terraform"
 
@@ -49,11 +47,6 @@
   post_tasks:
     - include: tasks/env.yml action=save
   tasks:
-
-    - set_fact:
-        apocng_k8s_nodes: 4
-
-
 
     - include: tasks/dump_ssh_key.yml
     - include: tasks/inventory.yml

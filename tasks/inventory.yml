@@ -1,6 +1,16 @@
+- name: dump inventory
+  copy:
+    content: "{{ apocng_kubespray_inventory }}"
+    dest: "/tmp/inventory.cfg"
+  when: apocng_kubespray_inventory is defined
+
 - command: "python /opt/playbooks/kubespray/contrib/inventory_builder/inventory.py {{ groups['target_hosts']|map('extract', hostvars, 'inventory_hostname') | list | join(' ') }}"
   environment:
     CONFIG_FILE: /tmp/inventory.cfg
+
+- name: save inventory
+  set_fact:
+    apocng_kubespray_inventory: "{{ lookup('file', '/tmp/inventory.cfg') }}"
 
 - raw: "cat /tmp/inventory.cfg | awk '/^node[0-9]+?.*[^ ]$/ { printf(\"s,%s,%s,g\\n\", $1, $1 \" \" $2 \" \" $3) }' | sed -i'' -rf - /tmp/inventory.cfg"
 

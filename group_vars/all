@@ -4,6 +4,7 @@ api:
 kubespray:
   default:
     cloud_provider: aws
+    kube_api_anonymous_auth: 1
 #    istio_enabled: True
 
 terraform_dir: "/opt/terraform"

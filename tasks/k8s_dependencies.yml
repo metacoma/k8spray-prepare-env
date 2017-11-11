@@ -1,0 +1,2 @@
+- name: add python
+  raw: "apt update && apt install -y python"

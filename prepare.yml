@@ -7,30 +7,22 @@
 
   pre_tasks:
     - include: tasks/env.yml action=load
-      tags:
-        - env
 
   post_tasks:
     - include: tasks/env.yml action=save
-      tags:
-        - env
 
   tasks:
     - include: tasks/group.yml terraform_item="{{ item }}"
       with_dict: "{{ apocng_terraform.modules[0].resources }}"
       when: apocng_provision_driver  == "terraform"
 
+    - include: tasks/wait_for_ssh.yml wait_for_host="{{ item }}" wait_for_delay=0
+      with_items: "{{ groups['target_hosts']|map('extract', hostvars, 'inventory_hostname') | list }}"
+
     - include: tasks/dump_ssh_key.yml
 
 - hosts: target_hosts
   gather_facts: false
   tasks:
-    - name: add python
-      raw: "apt update && apt install -y python"
 
-    - name: add python
-      command: "id"
-
-#    - name: prepare master
-#      include: tasks/configure_master.yml
-#      when: "inventory_hostname == groups['target_hosts'][0]"
+    - include: tasks/k8s_dependencies.yml

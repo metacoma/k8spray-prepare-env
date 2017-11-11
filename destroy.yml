@@ -16,11 +16,16 @@
       when: apocng_provision_driver  == "terraform"
 
     - include: tasks/dump_ssh_key.yml
+#    - name: ping master host
+#      ping:
+#      register: master_ping
+#      ignore_errors: true
+#      delegate_to: "{{ groups['target_hosts'][0] }}"
 
-    - name: "delete helm chart"
-      command: "helm delete k8spray"
-      delegate_to: "{{ groups['target_hosts'][0] }}"
-      ignore_errors: true
+#    - name: "delete helm chart"
+#      command: "helm delete k8spray"
+#      delegate_to: "{{ groups['target_hosts'][0] }}"
+#      ignore_errors: true
 
     - name: create terraform directory
       file:

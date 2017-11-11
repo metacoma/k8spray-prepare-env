@@ -1,0 +1,8 @@
+- name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+  wait_for:
+    port: 22
+    host: '{{ wait_for_host }}'
+    search_regex: OpenSSH
+    delay: "{{ wait_for_delay | default(10) }}"
+    timeout: "{{ wait_for_timeout | default(90) }}"
+  connection: local

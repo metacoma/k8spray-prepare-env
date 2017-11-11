@@ -3,6 +3,10 @@ providers:
   aws:
     enabled: true
 
+nginxBasicAuth:
+  service:
+    type: LoadBalancer
+
 spinnaker:
   redis:
     persistence:
@@ -16,4 +20,4 @@ spinnaker:
 
   ui:
     service:
-      type: LoadBalancer
+      type: ClusterIP

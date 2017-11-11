@@ -1,0 +1,6 @@
+- name: set fact
+  set_fact:
+    chart_path: /tmp/loghouse-0.0.1.tgz
+
+- name: install loghouse chart
+  command: "helm install --timeout 900 --wait -n loghouse {{ chart_path }} "

@@ -1,5 +1,7 @@
 envId: {{ hostvars['localhost'].apocng_uuid }}
 providers:
+  minikube:
+    enabled: false
   aws:
     enabled: true
 
@@ -23,3 +25,9 @@ spinnaker:
   ui:
     service:
       type: ClusterIP
+
+loghouse:
+  rbac:
+    enabled: true
+  service:
+    type: LoadBalancer

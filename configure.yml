@@ -62,5 +62,4 @@
       retries: 100
       delay: 2
 
-    #- include: tasks/install_loghouse_chart.yml
     - include: tasks/install_k8spray_chart.yml

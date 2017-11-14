@@ -20,6 +20,7 @@
     regexp: "^node[0-9]+?[ \t]+?ansible_host={{ item }}"
     replace: "{{ hostvars[item].aws.private_dns }} ansible_host={{ item }}"
   with_items: "{{ groups['target_hosts'] }}"
+  when: apocng_provision_driver == "terraform"
 
 - name: replace 3
   replace:
@@ -27,3 +28,12 @@
     regexp: "ip={{ item }}"
     replace: "access_ip={{ hostvars[item].aws.private_ip }} ansible_user=ubuntu become=true ansible_ssh_private_key_file=/tmp/{{ apocng_uuid }}-key"
   with_items: "{{ groups['target_hosts'] }}"
+  when: apocng_provision_driver == "terraform"
+
+- name: replace 4
+  replace:
+    path:  /tmp/inventory.cfg
+    regexp: "([0-9])$"
+    replace: "\\1 ansible_user={{ apocng_manual_user }} ansible_ssh_private_key_file=/tmp/{{ apocng_uuid }}-key"
+  with_items: "{{ groups['target_hosts'] }}"
+  when: apocng_provision_driver == "manual"

@@ -12,33 +12,6 @@
 
 
   tasks:
-    - include: tasks/terraform.yml
-      when: apocng_provision_driver  == "terraform"
-
-    - name: "terraform apply"
-      command: "terraform apply"
-      args:
-        chdir: "{{ terraform_dir }}"
-      when: apocng_provision_driver  == "terraform"
-
-#    - name: load terraform facts
-#      include_vars:
-#        file: "{{ terraform_dir }}/terraform.tfstate"
-#        name: apocng_terraform
-#      when: apocng_provision_driver  == "terraform"
-
-#    - include: tasks/group.yml terraform_item="{{ item }}"
-#      with_dict: "{{ apocng_terraform.modules[0].resources }}"
-#      when: apocng_provision_driver  == "terraform"
-
-#    - include: tasks/inventory.yml
-
-- hosts: target_hosts
-  gather_facts: false
-  tasks:
-    - name: add python
-      raw: "apt update && apt install -y python"
-
-    - name: add python
-      command: "id"
-
+    - include: tasks/group.yml
+    - include: tasks/dump_ssh_key.yml
+    - include: tasks/inventory.yml

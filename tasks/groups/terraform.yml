@@ -1,0 +1,13 @@
+- name: create group using terraform data
+  add_host:
+    ansible_ssh_user: "ubuntu"
+    ansible_ssh_private_key_file: '/tmp/{{ apocng_uuid }}-key'
+    hostname: '{{ terraform_item.value.primary.attributes.public_ip }}'
+    aws:
+      instance_id: '{{ terraform_item.value.primary.attributes.id }}'
+      provisioner: "terraform"
+      private_dns: '{{ terraform_item.value.primary.attributes.private_dns }}'
+      private_ip: '{{ terraform_item.value.primary.attributes.private_ip }}'
+    ansible_become: true
+    groups: target_hosts
+  when: "terraform_item.value.type == 'aws_instance'"

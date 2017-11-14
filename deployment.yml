@@ -1,10 +1,6 @@
 ---
 - hosts: localhost
   gather_facts: false
-  vars:
-    work_dir: /opt/terraform
-    apocng_provision_driver: "terraform"
-
   pre_tasks:
     - include: tasks/env.yml action=load
 
@@ -13,10 +9,7 @@
 
   tasks:
 
-    - include: tasks/group.yml terraform_item="{{ item }}"
-      with_dict: "{{ apocng_terraform.modules[0].resources }}"
-      when: apocng_provision_driver  == "terraform"
-
+    - include: tasks/group.yml
     - include: tasks/dump_ssh_key.yml
     - include: tasks/inventory.yml
 

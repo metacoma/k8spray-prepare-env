@@ -4,6 +4,16 @@
     dest: "/tmp/{{ apocng_uuid }}-key"
     mode: 0600
 
+- name: generate ssh pub key from private
+  command: "ssh-keygen -y -f /tmp/{{ apocng_uuid }}-key"
+  register: public_key
+  when: apocng_ssh_pub_key is undefined
+
+- name: load public key
+  set_fact:
+    apocng_ssh_pub_key: "{{ public_key.stdout }}"
+  when: apocng_ssh_pub_key is undefined
+
 - name: dump ssh pub key
   copy:
     content: "{{ apocng_ssh_pub_key }}"

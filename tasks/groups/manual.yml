@@ -1,0 +1,8 @@
+- name: "add {{ item }} to group target_hosts"
+  add_host:
+    ansible_ssh_user: "{{ apocng_manual_user }}"
+    ansible_ssh_private_key_file: '/tmp/{{ apocng_uuid }}-key'
+    hostname: '{{ item }}'
+    ansible_become: true
+    groups: target_hosts
+  with_items: "{{ apocng_manual_nodes }}"

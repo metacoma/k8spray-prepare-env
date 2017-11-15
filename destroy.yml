@@ -29,6 +29,6 @@
     - name: terraform destroy
       command: terraform destroy -force
       args:
-        chdir: "{{ work_dir }}"
+        chdir: "{{ terraform_dir }}"
       when: apocng_provision_driver  == "terraform"
 

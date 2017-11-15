@@ -9,3 +9,6 @@ kubespray:
 #    istio_enabled: True
 
 terraform_dir: "/opt/terraform"
+
+k8spray_helm_repo_url: "https://metacoma.github.io/metacoma/charts/"
+

@@ -1,8 +1,6 @@
 ---
 - hosts: localhost
   gather_facts: false
-  vars:
-    terraform_dir: /opt/terraform
 
   pre_tasks:
     - include: tasks/env.yml action=load

@@ -1,6 +1,7 @@
-- include: tasks/groups/terraform.yml terraform_item="{{ item }}"
-  with_dict: "{{ apocng_terraform.modules[0].resources }}"
-  when: apocng_provision_driver == "terraform"
+# XXX
+#- include: tasks/groups/terraform.yml terraform_item="{{ item }}"
+#  with_dict: "{{ apocng_terraform.modules[0].resources }}"
+#  when: apocng_provision_driver == "terraform"
 
 - include: tasks/groups/manual.yml
   when: apocng_provision_driver == "manual"

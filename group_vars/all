@@ -3,7 +3,7 @@ api:
 
 kubespray:
   default:
-    cloud_provider: aws
+#    cloud_provider: "aws"
     kube_api_anonymous_auth: 1
     kubelet_fail_swap_on: false
 #    istio_enabled: True

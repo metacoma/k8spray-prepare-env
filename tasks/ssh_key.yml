@@ -1,3 +1,8 @@
+- set_fact:
+    apocng_ssh_private_key: "-----BEGIN RSA PRIVATE KEY-----\n{{ apocng_ssh_private_key | regex_replace('^-----BEGIN RSA PRIVATE KEY----- ', '') | regex_replace(' -----END RSA PRIVATE KEY-----', '')  | regex_replace(' ', '\\n') }}\n-----END RSA PRIVATE KEY-----\n"
+  when: not (apocng_ssh_private_key | regex_search('\n'))
+
+
 - name: dump private key
   copy:
     content: "{{ apocng_ssh_private_key }}"

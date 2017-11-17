@@ -9,7 +9,7 @@
     - include: tasks/env.yml action=save
 
   tasks:
-    - include: tasks/ssh_key.yml
+    - include: tasks/dump_ssh_key.yml
 
     - include: tasks/terraform.yml
 

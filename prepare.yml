@@ -16,6 +16,7 @@
       when: apocng_provision_driver != "manual"
 
     - include: tasks/dump_ssh_key.yml
+      delegate_to: localhost
 
 - hosts: target_hosts
   gather_facts: false

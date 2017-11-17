@@ -1,13 +1,19 @@
+- set_fact:
+    apocng_ssh_private_key: "-----BEGIN RSA PRIVATE KEY-----\n{{ apocng_ssh_private_key | regex_replace('^-----BEGIN RSA PRIVATE KEY----- ', '') | regex_replace(' -----END RSA PRIVATE KEY-----', '')  | regex_replace(' ', '\\n') }}\n-----END RSA PRIVATE KEY-----\n"
+  when: not (apocng_ssh_private_key | regex_search('\n'))
+
 - name: dump ssh private key
   copy:
     content: "{{ apocng_ssh_private_key }}"
     dest: "/tmp/{{ apocng_uuid }}-key"
     mode: 0600
+  delegate_to: localhost
 
 - name: generate ssh pub key from private
   command: "ssh-keygen -y -f /tmp/{{ apocng_uuid }}-key"
   register: public_key
   when: apocng_ssh_pub_key is undefined
+  delegate_to: localhost
 
 - name: load public key
   set_fact:

@@ -1,26 +1,33 @@
 envId: {{ hostvars['localhost'].apocng_uuid }}
+
+{% if hostvars['localhost'].apocng_provision_driver == "terraform" %}
 providers:
   minikube:
     enabled: false
   aws:
     enabled: true
+{% endif %}
 
+{% if hostvars['localhost'].apocng_provision_driver == "terraform" %}
 nginxBasicAuth:
   service:
     type: LoadBalancer
+{% endif %}
 
 spinnaker:
   rbac:
     enabled: true
-  redis:
-    persistence:
-      enabled: true
-      storageClass: gp2
+{% if hostvars['localhost'].apocng_provision_driver == "terraform" %}
   minio:
     replicas: 4
     persistence:
       type: PersistentVolumeClaim
       storageClass: gp2
+  redis:
+    persistence:
+      enabled: true
+      storageClass: gp2
+{% endif %}
 
   ui:
     service:
@@ -29,5 +36,8 @@ spinnaker:
 loghouse:
   rbac:
     enabled: true
-  service:
+
+{% if hostvars['localhost'].apocng_provision_driver == "terraform" %}
+service:
     type: LoadBalancer
+{% endif %}

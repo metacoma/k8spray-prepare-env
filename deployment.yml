@@ -13,11 +13,13 @@
     - include: tasks/dump_ssh_key.yml
     - include: tasks/inventory.yml
 
+    - set_fact:
+        kubespray_values: "{{ kubespray.default }}"
+
+    - set_fact:
+        kubespray_values: "{{ kubespray_values | combine(kubespray.aws) }} "
+      when: apocng_provision_driver == "terraform"
+
     - copy:
-        content: "{{ kubespray.default | to_yaml }}"
+        content: "{{ kubespray_values | to_yaml }}"
         dest: "/tmp/{{ apocng_uuid }}-kubespray-values"
-
-#    - command: "ansible-playbook -i /tmp/inventory.cfg -e@/tmp/{{ apocng_uuid }}-kubespray-values /opt/playbooks/kubespray/cluster.yml --become"
-#      environment:
-#        ANSIBLE_CONFIG: "/opt/playbooks/kubespray/ansible.cfg"
-

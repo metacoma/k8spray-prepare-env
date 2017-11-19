@@ -2,8 +2,10 @@ api:
   host: https://apocng-k8spray:443
 
 kubespray:
+  aws:
+    cloud_provider: "aws"
+
   default:
-#    cloud_provider: "aws"
     kube_api_anonymous_auth: 1
     kubelet_fail_swap_on: false
 #    istio_enabled: True

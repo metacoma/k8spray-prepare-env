@@ -6,7 +6,7 @@ stages:
 build:
   stage: build
   script:
-    - docker build --no-cache . | tee /tmp/docker_build_${CI_PIPELINE_ID}.txt
+    - docker build . | tee /tmp/docker_build_${CI_PIPELINE_ID}.txt
 
 tag:
   stage: tag

@@ -17,4 +17,4 @@ tag:
 cleanup:
   stage: cleanup
   script:
-    - rm /tmp/docker_build_${CI_JOB_ID}.txt
+    - rm /tmp/docker_build_${CI_PIPELINE_ID}.txt

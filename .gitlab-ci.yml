@@ -1,6 +1,7 @@
 stages:
   - dockerhub_login
   - build
+  - syntax
   - tag
   - push
   - cleanup
@@ -15,6 +16,13 @@ build:
   stage: build
   script:
     - docker build . | tee /tmp/docker_build_${CI_PIPELINE_ID}.txt
+
+syntax:
+  stage: syntax
+  script:
+    # XXX parametrize image tag
+    - >
+      docker run --rm k8sprayorg/ansible:2.3.0.0 'ansible-playbook --syntax-check `ls /opt/playbooks/workflow/*.yml | grep -v requirements.yml`'
 
 tag:
   stage: tag

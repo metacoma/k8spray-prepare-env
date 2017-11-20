@@ -4,6 +4,7 @@ stages:
   - syntax
   - tag
   - push
+  - workflow_test
   - cleanup
 
 
@@ -34,6 +35,13 @@ push:
   stage: push
   script:
     - docker push k8sprayorg/ansible:2.3.0.0
+
+worklow_test:
+  stage: workflow_test
+  script:
+    - export CI_TOKEN=${CI_TOKEN}
+    - export MAIN_WORKFLOW_TOKEN=${MAIN_WORKFLOW_TOKEN}
+    - cd /tmp/ && /usr/local/bin/start_and_wait_pipeline.sh
 
 cleanup:
   stage: cleanup

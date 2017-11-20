@@ -22,5 +22,4 @@ RUN git clone https://github.com/metacoma/ansible-terraform-provision /opt/playb
 RUN git clone https://github.com/kubernetes-incubator/kubespray /opt/playbooks/kubespray
 RUN ansible-galaxy install -r /opt/playbooks/workflow/requirements.yml
 
-ENTRYPOINT /bin/sh
-CMD ["-c"]
+ENTRYPOINT ["/bin/sh", "-c"]

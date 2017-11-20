@@ -8,7 +8,7 @@ stages:
 
 dockerhub_login:
   stage: dockerhub_login
-  scripts:
+  scrips:
     - docker login -u ${DOCKERHUB_LOGIN} -p ${DOCKERHUB_PASSWORD}
 
 build:

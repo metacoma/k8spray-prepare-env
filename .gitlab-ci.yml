@@ -1,7 +1,15 @@
 stages:
+  - dockerhub_login
   - build
   - tag
+  - push
   - cleanup
+
+
+dockerhub_login:
+  stage: dockerhub_login
+  scripts:
+    - docker login -u ${DOCKERHUB_LOGIN} -p ${DOCKERHUB_PASSWORD}
 
 build:
   stage: build
@@ -13,6 +21,11 @@ tag:
   script:
     - export IMAGE_ID=`awk '/Successfully built/ {print $3}' /tmp/docker_build_${CI_PIPELINE_ID}.txt`
     - docker tag ${IMAGE_ID} k8sprayorg/ansible:2.3.0.0
+
+push:
+  stage: push
+  script:
+    - docker push k8sprayorg/ansible:2.3.0.0
 
 cleanup:
   stage: cleanup

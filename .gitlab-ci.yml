@@ -11,7 +11,7 @@ build:
 tag:
   stage: tag
   script:
-    - export IMAGE_ID=`awk '/Successfully built/ {print $3}' /tmp/docker_build_${CI_JOB_ID}.txt`
+    - export IMAGE_ID=`awk '/Successfully built/ {print $3}' /tmp/docker_build_${CI_PIPELINE_ID}.txt`
     - docker tag ${IMAGE_ID} k8sprayorg/ansible:2.3.0.0
 
 cleanup:

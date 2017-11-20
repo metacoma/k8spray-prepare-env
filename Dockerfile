@@ -22,4 +22,4 @@ ADD ./ /opt/playbooks/workflow
 RUN git clone https://github.com/kubernetes-incubator/kubespray /opt/playbooks/kubespray
 RUN ansible-galaxy install -r /opt/playbooks/workflow/requirements.yml
 
-ENTRYPOINT ansible-playbook -e env_id=$ENV_ID /opt/playbooks/workflow/playbook.yml
+ENTRYPOINT ["/bin/sh", "-c"]

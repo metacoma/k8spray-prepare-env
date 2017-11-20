@@ -1,0 +1,20 @@
+stages:
+  - build
+  - tag
+  - cleanup
+
+build:
+  stage: build
+  script:
+    - docker build . | tee /tmp/docker_build_${CI_PIPELINE_ID}.txt
+
+tag:
+  stage: tag
+  script:
+    - export IMAGE_ID=`awk '/Successfully built/ {print $3}' /tmp/docker_build_${CI_PIPELINE_ID}.txt`
+    - docker tag ${IMAGE_ID} k8sprayorg/ansible:2.3.0.0
+
+cleanup:
+  stage: cleanup
+  script:
+    - rm /tmp/docker_build_${CI_PIPELINE_ID}.txt

@@ -1,0 +1,17 @@
+stages:
+  - build
+  - tag
+  - cleanup
+
+build:
+  script:
+    - docker build --no-cache . | tee /tmp/docker_build_${CI_JOB_ID}.txt
+
+tag:
+  script:
+    - export IMAGE_ID=`awk '/Successfully built/ {print $3}' /tmp/docker_build_${CI_JOB_ID}.txt`
+    - docker tag ${IMAGE_ID} k8sprayorg/ansible:2.3.0.0
+
+cleanup:
+  script:
+    - rm /tmp/docker_build_${CI_JOB_ID}.txt

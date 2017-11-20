@@ -23,3 +23,4 @@ RUN git clone https://github.com/kubernetes-incubator/kubespray /opt/playbooks/k
 RUN ansible-galaxy install -r /opt/playbooks/workflow/requirements.yml
 
 ENTRYPOINT /bin/sh
+CMD ["-c"]

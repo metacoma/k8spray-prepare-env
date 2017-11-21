@@ -12,11 +12,15 @@ dockerhub_login:
   stage: dockerhub_login
   script:
     - docker login -u ${DOCKERHUB_LOGIN} -p ${DOCKERHUB_PASSWORD}
+  olny:
+    - pushes
 
 build:
   stage: build
   script:
     - docker build . | tee /tmp/docker_build_${CI_PIPELINE_ID}.txt
+  olny:
+    - pushes
 
 syntax:
   stage: syntax
@@ -24,17 +28,23 @@ syntax:
     # XXX parametrize image tag
     - >
       docker run --rm k8sprayorg/ansible:2.3.0.0 'ansible-playbook --syntax-check `ls /opt/playbooks/workflow/*.yml | grep -v requirements.yml`'
+  olny:
+    - pushes
 
 tag:
   stage: tag
   script:
     - export IMAGE_ID=`awk '/Successfully built/ {print $3}' /tmp/docker_build_${CI_PIPELINE_ID}.txt`
     - docker tag ${IMAGE_ID} k8sprayorg/ansible:2.3.0.0
+  olny:
+    - pushes
 
 push:
   stage: push
   script:
     - docker push k8sprayorg/ansible:2.3.0.0
+  olny:
+    - pushes
 
 worklow_test:
   stage: workflow_test
@@ -42,8 +52,12 @@ worklow_test:
     - export CI_TOKEN=${CI_TOKEN}
     - export MAIN_WORKFLOW_TOKEN=${MAIN_WORKFLOW_TOKEN}
     - cd /tmp/ && /usr/local/bin/start_and_wait_pipeline.sh
+  olny:
+    - pushes
 
 cleanup:
   stage: cleanup
   script:
     - rm /tmp/docker_build_${CI_PIPELINE_ID}.txt
+  olny:
+    - pushes

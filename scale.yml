@@ -26,6 +26,7 @@
       when: apocng_provision_driver  == "terraform"
 
     - include: tasks/group.yml
+    - include: tasks/dump_ssh_key.yml
 
 - hosts: target_hosts
   gather_facts: false

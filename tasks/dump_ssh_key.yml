@@ -1,3 +1,15 @@
+- name: generate ssh key
+  shell: 'echo y | ssh-keygen -b 2048 -t rsa -f /tmp/{{ apocng_uuid }}-key -q -N "" >/dev/null 2>&1'
+  register: generated_key
+  when: apocng_ssh_private_key is undefined and apocng_provision_driver == "terraform"
+  delegate_to: localhost
+
+- name: load user private key
+  set_fact:
+    apocng_ssh_private_key: "{{ lookup('FILE', '/tmp/' + apocng_uuid + '-key') }}"
+    apocng_ssh_pub_key: "{{ lookup('FILE', '/tmp/' + apocng_uuid + '-key.pub') }}"
+  when: generated_key.changed
+
 - set_fact:
     apocng_ssh_private_key: "-----BEGIN RSA PRIVATE KEY-----\n{{ apocng_ssh_private_key | regex_replace('^-----BEGIN RSA PRIVATE KEY----- ', '') | regex_replace(' -----END RSA PRIVATE KEY-----', '')  | regex_replace(' ', '\\n') }}\n-----END RSA PRIVATE KEY-----\n"
   when: not (apocng_ssh_private_key | regex_search('\n'))

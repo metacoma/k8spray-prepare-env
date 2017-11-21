@@ -16,10 +16,10 @@
     - name: terraform apply
       command: terraform apply
       args:
-        chdir: "{{ work_dir }}"
+        chdir: "{{ terraform_dir }}"
 
 
     - name: load terraform facts
       include_vars:
-        file: "{{ work_dir }}/terraform.tfstate"
+        file: "{{ terraform_dir }}/terraform.tfstate"
         name: apocng_terraform

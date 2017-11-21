@@ -8,6 +8,7 @@ kubespray:
   default:
     kube_api_anonymous_auth: 1
     kubelet_fail_swap_on: false
+    dashboard_enabled: true
 #    istio_enabled: True
 
 terraform_dir: "/opt/terraform"

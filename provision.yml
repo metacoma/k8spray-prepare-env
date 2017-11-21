@@ -13,8 +13,8 @@
 
     - include: tasks/terraform.yml
 
-    - name: terraform apply
-      command: terraform apply
+    - name: terraform apply -auto-approve
+      command: terraform apply -auto-approve
       args:
         chdir: "{{ terraform_dir }}"
 

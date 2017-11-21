@@ -9,7 +9,7 @@ stages:
 
 
 dockerhub_login:
-  olny:
+  only:
     - pushes
     - triggers
     - schedules
@@ -18,7 +18,7 @@ dockerhub_login:
     - docker login -u ${DOCKERHUB_LOGIN} -p ${DOCKERHUB_PASSWORD}
 
 build:
-  olny:
+  only:
     - pushes
     - triggers
     - schedules
@@ -27,7 +27,7 @@ build:
     - docker build . | tee /tmp/docker_build_${CI_PIPELINE_ID}.txt
 
 syntax:
-  olny:
+  only:
     - pushes
     - triggers
     - schedules
@@ -38,7 +38,7 @@ syntax:
       docker run --rm k8sprayorg/ansible:2.3.0.0 'ansible-playbook --syntax-check `ls /opt/playbooks/workflow/*.yml | grep -v requirements.yml`'
 
 tag:
-  olny:
+  only:
     - pushes
     - triggers
     - schedules
@@ -48,7 +48,7 @@ tag:
     - docker tag ${IMAGE_ID} k8sprayorg/ansible:2.3.0.0
 
 push:
-  olny:
+  only:
     - pushes
     - triggers
     - schedules
@@ -57,7 +57,7 @@ push:
     - docker push k8sprayorg/ansible:2.3.0.0
 
 worklow_test:
-  olny:
+  only:
     - pushes
     - triggers
     - schedules
@@ -68,7 +68,7 @@ worklow_test:
     - cd /tmp/ && /usr/local/bin/start_and_wait_pipeline.sh
 
 cleanup:
-  olny:
+  only:
     - pushes
     - triggers
     - schedules

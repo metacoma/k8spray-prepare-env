@@ -9,69 +9,76 @@ stages:
 
 
 dockerhub_login:
-  only:
-    - pushes
-    - triggers
-    - schedules
   stage: dockerhub_login
   script:
     - docker login -u ${DOCKERHUB_LOGIN} -p ${DOCKERHUB_PASSWORD}
-
-build:
   only:
-    - pushes
+    - web
     - triggers
     - schedules
+    - pipelines
+
+build:
   stage: build
   script:
     - docker build . | tee /tmp/docker_build_${CI_PIPELINE_ID}.txt
-
-syntax:
   only:
-    - pushes
+    - web
     - triggers
     - schedules
+    - pipelines
+
+syntax:
   stage: syntax
   script:
     # XXX parametrize image tag
     - >
       docker run --rm k8sprayorg/ansible:2.3.0.0 'ansible-playbook --syntax-check `ls /opt/playbooks/workflow/*.yml | grep -v requirements.yml`'
-
-tag:
   only:
-    - pushes
+    - web
     - triggers
     - schedules
+    - pipelines
+
+tag:
   stage: tag
   script:
     - export IMAGE_ID=`awk '/Successfully built/ {print $3}' /tmp/docker_build_${CI_PIPELINE_ID}.txt`
     - docker tag ${IMAGE_ID} k8sprayorg/ansible:2.3.0.0
-
-push:
   only:
-    - pushes
+    - web
     - triggers
     - schedules
+    - pipelines
+
+push:
   stage: push
   script:
     - docker push k8sprayorg/ansible:2.3.0.0
-
-worklow_test:
   only:
-    - pushes
+    - web
     - triggers
     - schedules
+    - pipelines
+
+worklow_test:
   stage: workflow_test
   script:
     - export CI_TOKEN=${CI_TOKEN}
     - export MAIN_WORKFLOW_TOKEN=${MAIN_WORKFLOW_TOKEN}
     - cd /tmp/ && /usr/local/bin/start_and_wait_pipeline.sh
-
-cleanup:
   only:
-    - pushes
+    - web
     - triggers
     - schedules
+    - pipelines
+
+cleanup:
   stage: cleanup
   script:
     - rm /tmp/docker_build_${CI_PIPELINE_ID}.txt
+  only:
+    - web
+    - triggers
+    - schedules
+    - pipelines

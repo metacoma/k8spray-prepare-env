@@ -28,6 +28,10 @@
     - include: tasks/group.yml
     - include: tasks/dump_ssh_key.yml
 
+    - include: tasks/wait_for_ssh.yml wait_for_host="{{ item }}" wait_for_delay=0
+      with_items: "{{ groups['target_hosts']|map('extract', hostvars, 'inventory_hostname') | list }}"
+      when: apocng_provision_driver != "manual"
+
 - hosts: target_hosts
   gather_facts: false
   tasks:

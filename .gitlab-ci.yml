@@ -4,8 +4,8 @@ stages:
   - syntax
   - tag
   - push
-  - workflow_test
-  - cleanup
+#  - workflow_test
+#  - cleanup
 
 
 dockerhub_login:
@@ -61,24 +61,24 @@ push:
     - schedules
     - pipelines
 
-worklow_test:
-  stage: workflow_test
-  script:
-    - export CI_TOKEN=${CI_TOKEN}
-    - export MAIN_WORKFLOW_TOKEN=${MAIN_WORKFLOW_TOKEN}
-    - cd /tmp/ && /usr/local/bin/start_and_wait_pipeline.sh
-  only:
-    - web
-    - triggers
-    - schedules
-    - pipelines
-
-cleanup:
-  stage: cleanup
-  script:
-    - rm /tmp/docker_build_${CI_PIPELINE_ID}.txt
-  only:
-    - web
-    - triggers
-    - schedules
-    - pipelines
+#worklow_test:
+#  stage: workflow_test
+#  script:
+#    - export CI_TOKEN=${CI_TOKEN}
+#    - export MAIN_WORKFLOW_TOKEN=${MAIN_WORKFLOW_TOKEN}
+#    - cd /tmp/ && /usr/local/bin/start_and_wait_pipeline.sh
+#  only:
+#    - web
+#    - triggers
+#    - schedules
+#    - pipelines
+#
+#cleanup:
+#  stage: cleanup
+#  script:
+#    - rm /tmp/docker_build_${CI_PIPELINE_ID}.txt
+#  only:
+#    - web
+#    - triggers
+#    - schedules
+#    - pipelines

@@ -14,7 +14,7 @@
       when: apocng_provision_driver  == "terraform"
 
     - name: "terraform apply"
-      command: "terraform apply"
+      command: "terraform apply -auto-approve"
       args:
         chdir: "{{ terraform_dir }}"
       when: apocng_provision_driver  == "terraform"

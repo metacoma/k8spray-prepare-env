@@ -15,7 +15,7 @@ RUN \
       python-dev  \
       libffi-dev  \
       openssl-dev \
-    && pip install netaddr configparser ansible==2.3.0.0
+    && pip install netaddr configparser ansible==2.4.0.0
 
 #RUN git clone https://github.com/metacoma/k8spray-workflow.git /opt/playbooks/workflow
 ADD ./ /opt/playbooks/workflow

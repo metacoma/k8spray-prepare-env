@@ -15,13 +15,13 @@ RUN \
       python-dev  \
       libffi-dev  \
       openssl-dev \
-    && pip install netaddr configparser ansible==2.3.0.0
+    && pip install netaddr configparser ansible==2.4.0.0
 
 RUN git clone https://github.com/metacoma/k8spray-workflow.git /opt/playbooks/workflow
 #ADD ./ /opt/playbooks/workflow
 RUN git clone https://github.com/kubernetes-incubator/kubespray /opt/playbooks/kubespray
 WORKDIR /opt/playbooks/kubespray
-RUN git checkout ca8a9c600a629ae19ee30f94c515fcc153279e3d
+RUN git checkout 626b35e1b023a682a0ea4c623bd25f773d00e911
 WORKDIR /opt/playbooks/workflow
 RUN ansible-galaxy install -r /opt/playbooks/workflow/requirements.yml
 
